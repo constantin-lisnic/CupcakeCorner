@@ -12,6 +12,7 @@ struct CheckoutView: View {
 
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
+    @State private var showApiRequestFail = false
 
     var body: some View {
         NavigationStack {
@@ -50,6 +51,11 @@ struct CheckoutView: View {
             } message: {
                 Text(confirmationMessage)
             }
+            .alert("Something went wrong!", isPresented: $showApiRequestFail) {
+                Button("OK") {}
+            } message: {
+                Text("Your request to place the order failed. Try again later.")
+            }
         }
     }
 
@@ -76,6 +82,7 @@ struct CheckoutView: View {
 
             showingConfirmation = true
         } catch {
+            showApiRequestFail = true
             print("Checkout failed: \(error.localizedDescription)")
         }
     }

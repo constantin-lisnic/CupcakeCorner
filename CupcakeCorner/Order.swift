@@ -37,18 +37,37 @@ class Order: Codable {
     var extraFrosting = false
     var addSprinkles = false
 
-    var name = ""
-    var streetAddress = ""
-    var city = ""
-    var zip = ""
+    var name = UserDefaults.standard.string(forKey: "name") ?? "" {
+        didSet {
+            UserDefaults.standard.set(name, forKey: "name")
+        }
+    }
+    var streetAddress =
+        UserDefaults.standard.string(forKey: "streetAddress") ?? ""
+    {
+        didSet {
+            UserDefaults.standard.set(streetAddress, forKey: "streetAddress")
+        }
+    }
+    var city = UserDefaults.standard.string(forKey: "city") ?? "" {
+        didSet {
+            UserDefaults.standard.set(city, forKey: "city")
+        }
+    }
+    var zip = UserDefaults.standard.string(forKey: "zip") ?? "" {
+        didSet {
+            UserDefaults.standard.set(zip, forKey: "zip")
+        }
+    }
 
     var hasValidAddress: Bool {
-        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty
+        if isValidField(name) && isValidField(streetAddress)
+            && isValidField(city) && isValidField(zip)
         {
-            return false
+            return true
         }
 
-        return true
+        return false
     }
 
     var cost: Decimal {
@@ -70,4 +89,12 @@ class Order: Codable {
 
         return cost
     }
+}
+
+func isValidField(_ string: String) -> Bool {
+    if string.trimmingCharacters(in: .whitespaces).isEmpty {
+        return false
+    }
+
+    return true
 }
